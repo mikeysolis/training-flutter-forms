@@ -32,10 +32,17 @@ class _AllFormFieldsState extends State<AllFormFields> {
   final nameInputController = TextEditingController();
   final emailInputController = TextEditingController();
   final commentsInputController = TextEditingController();
+  final creditCardInputController = TextEditingController();
+
+  // The dropdown doesn't use a controller but it still needs a way to
+  // hold it selected value.
+  String kittenName = '';
+  // The optOut checkbox similarly needs somewhere to hold its value
+  bool? optOut = false;
 
   // 3) Third, create any validators for the form fields. In this example
-  // I will use the form_field_validator package. To see an example of validation
-  // using native Flutter view the 'Basic Form' example.
+  // I'm using both a package for validation and the flutter way so it's easy
+  // to compare how the both work.
   final nameValidator = RequiredValidator(errorText: 'Please enter your name');
   final emailValidator = MultiValidator([
     RequiredValidator(errorText: 'Please enter your email'),
@@ -70,6 +77,7 @@ class _AllFormFieldsState extends State<AllFormFields> {
     nameInputController.dispose();
     emailInputController.dispose();
     commentsInputController.dispose();
+    creditCardInputController.dispose();
     super.dispose();
   }
 
@@ -162,6 +170,72 @@ class _AllFormFieldsState extends State<AllFormFields> {
             ),
           ),
           const SizedBox(height: 40.0),
+          const Text(
+            'Credit Card Number',
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20.0),
+          TextFormField(
+            controller: creditCardInputController,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              icon: Icon(Icons.credit_card),
+              labelText: 'Credit Card*',
+              hintText: 'Enter credit card #',
+            ),
+            // An example of old school validation, here we are not using a package
+            validator: (value) {
+              if (value != null) {
+                if (int.tryParse(value) == null) {
+                  return 'A CC number must be an int';
+                }
+                if (value.isEmpty) return 'Please enter a credit card number';
+                if (value.length != 16) return 'Please enter a valid CC number';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20.0),
+          const Text(
+            'Dropdown',
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20.0),
+          DropdownButtonFormField(
+            // The list of items must be of type DropdownMenuItem so here we create
+            // a List<String> and then map each item to a DropdownMenuItem.
+            items: [
+              'Fluffy',
+              'Oliver',
+              'Shadow',
+              'Dexter',
+            ].map<DropdownMenuItem<String>>(
+              (String val) {
+                return DropdownMenuItem(
+                  child: Text(val),
+                  value: val,
+                );
+              },
+            ).toList(),
+            onChanged: (value) => setState(() => kittenName = value as String),
+            decoration: const InputDecoration(
+              icon: Icon(Icons.catching_pokemon),
+              labelText: 'Select kitten Name',
+            ),
+          ),
+          const SizedBox(height: 40.0),
+          const Text(
+            'Checkbox',
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20.0),
+          CheckboxListTile(
+            value: optOut,
+            title: const Text('Opt Out'),
+            onChanged: (value) => setState(() => optOut = value),
+          ),
+          const SizedBox(height: 40.0),
           ElevatedButton(
             child: const Text('Submit'),
             onPressed: () => _submit(context),
@@ -209,6 +283,18 @@ class _AllFormFieldsState extends State<AllFormFields> {
             ),
             Text(
               'Comments: ${commentsInputController.text.isNotEmpty ? commentsInputController.text : 'No comments'}',
+              style: const TextStyle(fontSize: 12.0, height: 1.5),
+            ),
+            Text(
+              'Credit Card: ${creditCardInputController.text}',
+              style: const TextStyle(fontSize: 12.0, height: 1.5),
+            ),
+            Text(
+              'Kitten Name: ${kittenName.isEmpty ? 'No name' : kittenName}',
+              style: const TextStyle(fontSize: 12.0, height: 1.5),
+            ),
+            Text(
+              'Opt Out: ${optOut.toString()}',
               style: const TextStyle(fontSize: 12.0, height: 1.5),
             ),
           ],
