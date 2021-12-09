@@ -1,3 +1,7 @@
+// Class: HomePage
+// This class display a basic form using only the Flutter SDK,
+// no plugins or anything else.
+
 import 'package:flutter/material.dart';
 
 import 'basic_form/basic_form_page.dart';
