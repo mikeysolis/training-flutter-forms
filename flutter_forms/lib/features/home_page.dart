@@ -6,6 +6,7 @@
 
 import 'package:flutter/material.dart';
 
+import 'basic_form/all_form_fields.dart';
 import 'basic_form/basic_form_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -28,9 +29,15 @@ class HomePage extends StatelessWidget {
         return Column(
           children: [
             ListTile(
-              title: const Text('Flutter Form'),
+              title: const Text('Flutter Basic Form'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => BasicFormPage.show(context),
+            ),
+            const Divider(),
+            ListTile(
+              title: const Text('Flutter All Form Fields'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => AllFormFields.show(context),
             ),
             const Divider(),
           ],
