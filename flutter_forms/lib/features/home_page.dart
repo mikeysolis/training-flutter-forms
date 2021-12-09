@@ -1,6 +1,8 @@
 // Class: HomePage
-// This class display a basic form using only the Flutter SDK,
-// no plugins or anything else.
+// This class just displays a ListView of different forms that
+// have been built. These forms include:
+// 1) Flutter Form - a basic form using only the Flutter SDK
+// 2) Reactive Form - the same form as above but implented using the reactive_forms package.
 
 import 'package:flutter/material.dart';
 
@@ -26,7 +28,7 @@ class HomePage extends StatelessWidget {
         return Column(
           children: [
             ListTile(
-              title: const Text('Basic Form'),
+              title: const Text('Flutter Form'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => BasicFormPage.show(context),
             ),
